@@ -1,3 +1,8 @@
+# Local development
+.idea/
+*crhelper*
+*/tests/
+
 
 # Created by https://www.gitignore.io/api/osx,linux,python,windows,pycharm,visualstudiocode
 
