@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: CloudFormation Custom Resource for creating Amazon Cognito domain.
+Resources:
+  CognitoDomainFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://rezabekf-cfn-custom-resource/cognito_domain_fn/ada65c12d531fdc29c9922717eff2c8c
+      Handler: domain.handler
+      Runtime: python3.7
+      Timeout: 30
+      Policies:
+      - Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - logs:CreateLogGroup
+          - logs:CreateLogStream
+          - logs:PutLogEvents
+          Resource: arn:aws:logs:*:*:*
+        - Effect: Allow
+          Action:
+          - cognito-idp:*
+          Resource: '*'
+Outputs:
+  CognitoDomainFunction:
+    Description: ARN for Amazon Cognito domain custom resource function
+    Value:
+      Fn::GetAtt:
+      - CognitoDomainFunction
+      - Arn
+    Export:
+      Name: CognitoDomainFunction

@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Cognito User pool with User Pool Domain and Identity Service Provider
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  Domain:
+    Description: Amazon Cognito domain name.
+    Type: String
+    AllowedPattern: ^[0-9a-z]+(-[0-9a-z]+)*$
+    ConstraintDescription: Prefixed domain names can only contain lower-case letters, numbers, and hyphens.
+
+Resources:
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: true
+      AliasAttributes:
+        - preferred_username
+      AutoVerifiedAttributes:
+        - email
+      Schema:
+        - Name: email
+          AttributeDataType: String
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: true
+      UserPoolName: CfnCustomPool
+
+  CognitoDomainConfig:
+    Type: 'Custom::CognitoDomainConfig'
+    Version: '1.0'
+    Properties:
+      ServiceToken: !ImportValue CognitoDomainFunction
+      DomainName: !Ref Domain
+      UserPoolId: !Ref CognitoUserPool
+
+  CognitoIdpConfig:
+    Type: 'Custom::CognitoIdpConfig'
+    Version: '1.0'
+    Properties:
+      ServiceToken: !ImportValue CognitoIdpFunction
+      UserPoolId: !Ref CognitoUserPool
+      ProviderName: SignIn
+      ProviderType: SAML
+      ProviderDetails: https://idp-integ.federate.amazon.com/api/saml2/v2/metadata
+      AttributeMapping: email
+
+  CognitoAppConfig:
+    Type: 'Custom::CognitoAppConfig'
+    Version: '1.0'
+    Properties:
+      ServiceToken: !ImportValue CognitoAppFunction
+      UserPoolId: !Ref CognitoUserPool
+      ClientName: MyClientName
+      ProviderName: SignIn # Should be same as a provider name in CognitoIdpConfig

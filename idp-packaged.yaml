@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: CloudFormation Custom Resource for creating Amazon Cognito identity provider.
+Resources:
+  CognitoIdpFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://rezabekf-cfn-custom-resource/cognito_idp_fn/a5c1b3655ae433605c75b6a37d9c6bdc
+      Handler: idp.handler
+      Runtime: python3.7
+      Timeout: 30
+      Policies:
+      - Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - logs:CreateLogGroup
+          - logs:CreateLogStream
+          - logs:PutLogEvents
+          Resource: arn:aws:logs:*:*:*
+        - Effect: Allow
+          Action:
+          - cognito-idp:*
+          Resource: '*'
+Outputs:
+  CognitoIdpFunction:
+    Description: ARN for Amazon Cognito identity provider custom resource function
+    Value:
+      Fn::GetAtt:
+      - CognitoIdpFunction
+      - Arn
+    Export:
+      Name: CognitoIdpFunction
