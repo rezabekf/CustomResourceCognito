@@ -18,12 +18,12 @@ To deploy, run the following commands:
 $ pip3 install crhelper -t ./cognito_domain/
 $ aws s3 mb s3://${S3-BUCKET-NAME}/
 $ sam package \
-    --output-template-file packaged.yaml \
+    --output-template-file domain-packaged.yaml \
     --s3-bucket ${S3-BUCKET-NAME} \
     --s3-prefix cognito_domain_fn \
     --template-file cognito-domain.yaml
 $ aws cloudformation deploy \
-    --template-file packaged.yaml \
+    --template-file domain-packaged.yaml \
     --stack-name cognito-domain-name \
     --capabilities CAPABILITY_IAM
 ```
