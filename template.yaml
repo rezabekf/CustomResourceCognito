@@ -9,6 +9,14 @@ Parameters:
     AllowedPattern: ^[0-9a-z]+(-[0-9a-z]+)*$
     ConstraintDescription: Prefixed domain names can only contain lower-case letters, numbers, and hyphens.
 
+  CallbackURLs:
+    Description: Callback URL(s) for sign in requests. Can contain multiple URLs by entering a comma after each URL.
+    Type: CommaDelimitedList
+
+  SignOutURLSs:
+    Description: Sign out URL(s) for sign out requests. Can contain multiple URLs by entering a comma after each URL.
+    Type: CommaDelimitedList
+
 Resources:
   CognitoUserPool:
     Type: AWS::Cognito::UserPool
@@ -41,7 +49,7 @@ Resources:
     Properties:
       ServiceToken: !ImportValue CognitoIdpFunction
       UserPoolId: !Ref CognitoUserPool
-      ProviderName: SignIn
+      ProviderName: Sign # Should be same as a provider name in CognitoAppConfig
       ProviderType: SAML
       ProviderDetails: https://idp-integ.federate.amazon.com/api/saml2/v2/metadata
       AttributeMapping: email
@@ -52,5 +60,9 @@ Resources:
     Properties:
       ServiceToken: !ImportValue CognitoAppFunction
       UserPoolId: !Ref CognitoUserPool
-      ClientName: MyClientName
-      ProviderName: SignIn # Should be same as a provider name in CognitoIdpConfig
+      ClientName: AppClientTest
+      ProviderName: Sign # Should be same as a provider name in CognitoIdpConfig
+      CallbackURLs: !Ref CallbackURLs
+      LogoutURLs: !Ref SignOutURLSs
+    DependsOn:
+      - CognitoIdpConfig
