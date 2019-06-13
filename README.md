@@ -69,19 +69,17 @@ To use it, run:
 aws cloudformation deploy \
   --template-file template.yaml \
   --stack-name cognito-user-pool \
-  --parameter-overrides Domain=${DOMAIN_NAME} ${CallbackURLs} ${SignOutURLSs}
+  --parameter-overrides Domain=${DOMAIN} ${CallbackURLs} ${SignOutURLSs}
 ```
 
-Replace `${DOMAIN_NAME}` with your base domain.
-
-For example, if you wanted to use domain `my-test-domain`, you would use:
+For example:
 
 ```bash
 aws cloudformation deploy \
   --template-file template.yaml \
   --stack-name cognito-user-pool \
   --parameter-overrides \
-    Domain=uksb-test-02 \
+    Domain=uksb-test-01 \
     CallbackURLs=https://primary.app.url/login,https://secondary.app.url/login \
     SignOutURLSs=https://primary.app.url/logout,https://secondary.app.url/logout
 ```
