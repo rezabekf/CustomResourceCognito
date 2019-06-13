@@ -49,7 +49,7 @@ Resources:
     Properties:
       ServiceToken: !ImportValue CognitoIdpFunction
       UserPoolId: !Ref CognitoUserPool
-      ProviderName: Sign # Should be same as a provider name in CognitoAppConfig
+      ProviderName: SignIn # Should be same as a provider name in CognitoAppConfig
       ProviderType: SAML
       ProviderDetails: https://idp-integ.federate.amazon.com/api/saml2/v2/metadata
       AttributeMapping: email
@@ -60,8 +60,8 @@ Resources:
     Properties:
       ServiceToken: !ImportValue CognitoAppFunction
       UserPoolId: !Ref CognitoUserPool
-      ClientName: AppClientTest
-      ProviderName: Sign # Should be same as a provider name in CognitoIdpConfig
+      ClientName: AppClient
+      ProviderName: SignIn # Should be same as a provider name in CognitoIdpConfig
       CallbackURLs: !Ref CallbackURLs
       LogoutURLs: !Ref SignOutURLSs
     DependsOn:
