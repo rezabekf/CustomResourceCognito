@@ -9,6 +9,10 @@ Parameters:
     AllowedPattern: ^[0-9a-z]+(-[0-9a-z]+)*$
     ConstraintDescription: Prefixed domain names can only contain lower-case letters, numbers, and hyphens.
 
+  ProviderDetails:
+    Description: The identity provider details MetadataURL.
+    Type: String
+
   CallbackURLs:
     Description: Callback URL(s) for sign in requests. Can contain multiple URLs by entering a comma after each URL.
     Type: CommaDelimitedList
@@ -51,7 +55,7 @@ Resources:
       UserPoolId: !Ref CognitoUserPool
       ProviderName: SignIn # Should be same as a provider name in CognitoAppConfig
       ProviderType: SAML
-      ProviderDetails: https://idp-integ.federate.amazon.com/api/saml2/v2/metadata
+      ProviderDetails: !Ref ProviderDetails
       AttributeMapping: email
 
   CognitoAppConfig:
